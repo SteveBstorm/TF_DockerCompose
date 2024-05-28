@@ -1,0 +1,7 @@
+CREATE DATABASE dockerdb;
+
+CREATE TABLE dockertable (
+    ID INTEGER PRIMARY KEY SERIAL,
+    NAME TEXT
+
+)

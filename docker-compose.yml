@@ -1,0 +1,57 @@
+version: '1'
+
+networks:
+  back:
+    internal: true
+    # ipam: 
+    #   driver: bridge
+    #   config:
+    #    - subnet: 10.0.0.0/16
+    #      ip_range: 10.0.0.0/24
+    #      gateway: 10.0.0.254
+  front:
+    internal : false
+
+services: 
+  postgres:
+    container_name: postgres_db_c
+    restart: always
+    image: mydb_image:v1.0.0
+    ports: 
+      - "5432:5432"
+    networks:
+      - back
+      # back:
+      #   ipv4_adress : 10.0.0.2
+
+   # build: 
+    #  dockerfile: mydb/Dockerfile
+    volumes:
+      - pgdata:/var/postgres/pgdata
+  front:
+    container_name: myfrontend_c
+    image: myfrontend:v1.0.0
+    ports:
+      - "8080:80"
+    networks:
+      - front
+    depends_on:
+      - back
+  back:
+    container_name: mybackendapp_c
+    image: mybackendapp:v1.0.0
+    # build: 
+    #   dockerfile: backend/Dockerfile
+    #   context: .
+    restart: unless-stopped
+    #restart: on-failure[10]
+    
+    ports:
+      - "3000:3000"
+    networks:
+      - back
+    depends_on:
+      - postgres
+    
+volumes:
+  pgdata:
