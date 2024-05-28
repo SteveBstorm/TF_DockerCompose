@@ -1,0 +1,104 @@
+-----------COMMANDES-----------
+docker run -d nginx:latest => si l'image est présente en local, démarre un container
+			      avec un nom random 
+			--name nom => permet de donner un nom perso à l'image
+			-d => détache l'image de la console en cours (arrière plan)
+			-ti => permet d'avoir une console interactive directement sur le container (ex : une distrib linux, ou un serveur sql)
+			--rm => force la supression du container dés qu'on le stop
+			--hostname => permet de nommé l'hote du container
+
+
+docker ps => liste les image en cours d'exec
+		-a montre TOUTE les images sur le système
+
+
+docker stop nom/id => coupe le container
+
+docker start nom/id => démarre le container
+
+docker rm nom/id => supprime un container 
+		-f : force l'arrêt avant la suppression
+
+
+--------- VOLUME -------
+
+
+docker volume ls => liste les volumes sur la machine
+docker volume create nom => crée un volume
+
+lier volume à un container : 
+ au moment de la création du container : 
+ 
+	la commande suivante pointe vers lendroit ou se trouve le fichier index.html de mon serveur nginx
+
+ docker run -d --name c1 -v mynginx:/usr/share/nginx/html/ nginx:latest
+
+	-v : permet de lier un volume
+
+
+
+----------Réseaux docker----------
+
+Par défaut on est sur un bridge nomé docker0
+	par défaut : 172.17.0.1
+
+publication de port => mapping d'un port du container avec un port du host 
+
+docker run -d --name c2 -p 8080:80 nginx:latest
+
+
+
+CREATION D'IMAGE
+-----docker commit-----
+
+permet de faire une capture à l'instant T d'un container et d'en faire une image
+
+docker commit c1 nomimage:version
+
+
+-----DOCKER FILE-------
+
+Docker file => Recete de cuisine
+objectif : Packager une image et la publier ou la partager
+
+Etape 1 : Choisir son image : applicatif  node/nginx/ ou os type debian
+
+Etape 2 : suite d'instructions ...
+
+Etape 3 : processus attaché au container
+
+
+CONVENTION :
+
+fichier plat sans indentations particulières
+commentaires via #
+instrunction EN MAJUSCULE
+argument en minuscule
+
+
+
+------------------------
+-----Docker Compose-----
+------------------------
+
+
+commande de base : 
+------
+
+docker-compose build
+	construction des images
+
+docker-compose up
+	construction + run des images
+
+docker-compose up -d
+	detached
+
+docker-compose ps
+	etat eds services
+
+docker-compose start / stop / rm
+	redémarre les container du service
+
+docker-compose scale nomduservice=3
+	lance 3 instancesd
